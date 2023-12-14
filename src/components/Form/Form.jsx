@@ -1,69 +1,69 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice';
 import s from "./Form.module.css";
 
-class Form extends Component {
-  static propTypes = {
-    submitMethod: PropTypes.func.isRequired,
-  };
-  state = { name: "", number: "", id: "" };
+const Form = () => {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({ name: "", number: "" });
 
- 
-
-  handleClick = (event) => {
-    const { value, name, id } = event.target;
-    this.setState({ [name]: value, id: id });
+  const handleClick = (event) => {
+    const { value, name } = event.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    this.props.submitMethod(this.state);
-    this.resetState();
+    dispatch(addContact(formData));
+    resetState();
   };
 
-  resetState = () => {
-    this.setState({ name: "", number: "", id: "" });
+  const resetState = () => {
+    setFormData({ name: "", number: "" });
   };
 
-  render() {
-    return (
-      <form className={s.thumb} onSubmit={this.handleSubmit}>
-        <label htmlFor={this.uniqId}>
-          <span className={s.name}>Name</span>
-          <input
-            className={s.input}
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Bath de Castelmore d'Artagnan"
-            required
-            value={this.state.name}
-            onChange={this.handleClick}
-            id={nanoid()}
-          />
-        </label>
+  return (
+    <form className={s.thumb} onSubmit={handleSubmit}>
+      <label htmlFor={nanoid()}>
+        <span className={s.name}>Name</span>
+        <input
+          className={s.input}
+          type="text"
+          name="name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Bath de Castelmore d'Artagnan"
+          required
+          value={formData.name}
+          onChange={handleClick}
+          id={nanoid()}
+        />
+      </label>
 
-        <label>
-          <span className={s.name}>Number</span>
-          <input
-            type="tel"
-            className={s.input}
-            name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-            onChange={this.handleClick}
-            value={this.state.number}
-            id={nanoid()}
-          />
-        </label>
-        <button type="submit" className={s.button}>
-          Save contact
-        </button>
-      </form>
-    );
-  }
-}
+      <label>
+        <span className={s.name}>Number</span>
+        <input
+          type="tel"
+          className={s.input}
+          name="number"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+          onChange={handleClick}
+          value={formData.number}
+          id={nanoid()}
+        />
+      </label>
+      <button type="submit" className={s.button}>
+        Save contact
+      </button>
+    </form>
+  );
+};
+
+Form.propTypes = {
+  submitMethod: PropTypes.func.isRequired,
+};
 
 export default Form;
