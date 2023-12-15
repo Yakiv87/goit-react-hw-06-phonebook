@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/contactsSlice';
+import { removeContact } from '../../redux/contactsSlice';
 
 const Contacts = () => {
   const contacts = useSelector((state) => state.contacts);
   const dispatch = useDispatch();
 
   const handleDelete = (id) => {
-    dispatch(deleteContact(id));
+    dispatch(removeContact(id));
   };
 
   return (
