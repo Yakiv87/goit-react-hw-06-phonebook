@@ -4,16 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeContact } from '../../redux/contactsSlice';
 
 const Contacts = () => {
-  const contacts = useSelector((state) => state.contacts);
+  const contacts = useSelector(state => state.contacts);
   const dispatch = useDispatch();
 
-  const handleDelete = (id) => {
+  const handleDelete = id => {
     dispatch(removeContact(id));
   };
 
-  return (
+  return  (
     <ul>
-      {contacts.map((contact) => (
+      {Array.isArray(contacts) && contacts.map((contact) => (
         <li key={contact.id}>
           {contact.name}: {contact.number}
           <button onClick={() => handleDelete(contact.id)}>Delete</button>
@@ -21,13 +21,16 @@ const Contacts = () => {
       ))}
     </ul>
   );
+  
 };
+
+export default Contacts;
 Contacts.propTypes = {
     contacts: PropTypes.array.isRequired,
     deleteFunction: PropTypes.func.isRequired,
   };
 
-export default Contacts;
+
 
 
 
